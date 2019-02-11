@@ -1,13 +1,12 @@
 const express = require('express');
-const db = require('./data/db.js');
+const db = require('./data/db');
 
 const server = express(); 
 
 server.use(express.json());
 
 server.get('/api/users', (req, res) => {
-  db.users
-    .find()
+  db.find()
     .then(users => {
       res.status(200).json({ success: true, users });
     })
@@ -19,8 +18,8 @@ server.get('/api/users', (req, res) => {
 server.post('/api/users', (req, res) => {
   const user = req.body;
 
-  db.users
-    .add(user)
+  db
+    .insert(user)
     .then(user => {
       res.status(201).json({ success: true, user });
     })
@@ -29,20 +28,30 @@ server.post('/api/users', (req, res) => {
     });
 });
 
-// server.delete('/hubs/:id', (req, res) => {
-//   const hubId = req.params.id;
-//   // for a route defined as /hubs/:id/messages/:messageId
-//   // making a request to /hubs/123/messages/234
-//   // will make req.params be: { id: 123 , messageId: 234}
-//   db.hubs
-//     .remove(hubId)
-//     .then(deleted => {
-//       res.status(204).end();
-//     })
-//     .catch(({ code, message }) => {
-//       res.status(code).json({ success: false, message });
-//     });
-// });
+server.get('/api/users/:id', (req, res) => {
+    const userId = req.params.id;
+
+    db.findById(userId)
+      .then(user => {
+        res.status(200).json({ success: true, user });
+      })
+      .catch(err => {
+        res.status(err.code).json({ success: false, message: err.message });
+      });
+  });
+
+server.delete('/hubs/:id', (req, res) => {
+  const userId = req.params.id;
+
+  db
+    .remove(userId)
+    .then(deleted => {
+      res.status(204).end();
+    })
+    .catch(({ code, message }) => {
+      res.status(code).json({ success: false, message });
+    });
+});
 
 // server.put('/hubs/:id', (req, res) => {
 //   const { id } = req.params;
