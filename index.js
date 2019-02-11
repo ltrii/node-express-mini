@@ -16,18 +16,18 @@ server.get('/api/users', (req, res) => {
     });
 });
 
-// server.post('/api/users', (req, res) => {
-//   const hub = req.body;
+server.post('/api/users', (req, res) => {
+  const user = req.body;
 
-//   db.hubs
-//     .add(hub)
-//     .then(hub => {
-//       res.status(201).json({ success: true, hub });
-//     })
-//     .catch(({ code, message }) => {
-//       res.status(code).json({ success: false, message });
-//     });
-// });
+  db.users
+    .add(user)
+    .then(user => {
+      res.status(201).json({ success: true, user });
+    })
+    .catch(({ code, message }) => {
+      res.status(code).json({ success: false, message });
+    });
+});
 
 // server.delete('/hubs/:id', (req, res) => {
 //   const hubId = req.params.id;
@@ -65,6 +65,6 @@ server.get('/api/users', (req, res) => {
 //     });
 // });
 
-// server.listen(4000, () => {
-//   console.log('\n*** Running on port 4000 ***\n');
-// });
+server.listen(5220, () => {
+  console.log('\n*** Running on port 5220 ***\n');
+});
